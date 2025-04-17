@@ -39,3 +39,9 @@ interface BorrowBookParams {
   bookId: string;
   userId: string;
 }
+
+export type ImageKitResponse = {
+  token: string;
+  signature: string;
+  expire: number;
+}

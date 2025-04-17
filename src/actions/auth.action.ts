@@ -5,47 +5,46 @@ import { db } from "@/database/drizzle";
 import { users } from "@/database/schema";
 import { hash } from "bcryptjs";
 import { signIn } from "@/auth";
-import { headers } from "next/headers";
-import ratelimit from "@/lib/ratelimit";
-import { redirect } from "next/navigation";
-import { workflowClient } from "@/lib/workflow";
-import config from "@/lib/config";
+// import { headers } from "next/headers";
+// import ratelimit from "@/lib/ratelimit";
+// import { redirect } from "next/navigation";
+// import { workflowClient } from "@/lib/workflow";
+// import config from "@/lib/config";
 
 export const signInWithCredentials = async (
   params: Pick<AuthCredentials, "email" | "password">,
 ) => {
   const { email, password } = params;
 
-  const ip = (await headers()).get("x-forwarded-for") || "127.0.0.1";
-  const { success } = await ratelimit.limit(ip);
-
-  if (!success) return redirect("/too-fast");
-
   try {
     const result = await signIn("credentials", {
       email,
       password,
-      redirect: false,
+      redirect: false
     });
 
-    if (result?.error) {
+    if (!result) {
+      return { success: false, error: "Authentication failed" };
+    }
+
+    if (result.error) {
       return { success: false, error: result.error };
     }
 
     return { success: true };
   } catch (error) {
-    console.log(error, "Signin error");
-    return { success: false, error: "Signin error" };
+    console.error("Signin error:", error);
+    return { success: false, error: "Authentication failed" };
   }
 };
 
 export const signUp = async (params: AuthCredentials) => {
   const { fullName, email, universityId, password, universityCard } = params;
 
-  const ip = (await headers()).get("x-forwarded-for") || "127.0.0.1";
-  const { success } = await ratelimit.limit(ip);
+  // const ip = (await headers()).get("x-forwarded-for") || "127.0.0.1";
+  // const { success } = await ratelimit.limit(ip);
 
-  if (!success) return redirect("/too-fast");
+  // if (!success) return redirect("/too-fast");
 
   const existingUser = await db
     .select()
@@ -60,7 +59,8 @@ export const signUp = async (params: AuthCredentials) => {
   const hashedPassword = await hash(password, 10);
 
   try {
-    await db.insert(users).values({
+    await db.insert(users)
+    .values({
       fullName,
       email,
       universityId,
@@ -68,13 +68,13 @@ export const signUp = async (params: AuthCredentials) => {
       universityCard,
     });
 
-    await workflowClient.trigger({
-      url: `${config.env.prodApiEndpoint}/api/workflows/onboarding`,
-      body: {
-        email,
-        fullName,
-      },
-    });
+    // await workflowClient.trigger({
+    //   url: `${config.env.prodApiEndpoint}/api/workflows/onboarding`,
+    //   body: {
+    //     email,
+    //     fullName,
+    //   },
+    // });
 
     await signInWithCredentials({ email, password });
 
