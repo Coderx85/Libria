@@ -67,3 +67,7 @@ export const borrowRecords = pgTable("borrow_records", {
   status: BORROW_STATUS_ENUM("status").default("BORROWED").notNull(),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
 });
+
+export type User = typeof users.$inferSelect;
+export type Book = typeof books.$inferSelect;
+export type BorrowRecord = typeof borrowRecords.$inferSelect;
