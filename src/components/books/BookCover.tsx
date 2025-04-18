@@ -3,6 +3,8 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import { IKImage } from "imagekitio-next";
+import config from "@/lib/config";
 
 type BookCoverVariant = "extraSmall" | "small" | "medium" | "regular" | "wide";
 
@@ -47,6 +49,16 @@ const BookCover = ({
           fill
           className="rounded-sm object-fill"
         /> )}
+
+        <IKImage
+          path={coverImage}
+          urlEndpoint={config.env.imagekit.urlEndpoint}
+          alt="Book cover"
+          fill
+          className="rounded-sm object-fill"
+          loading="lazy"
+          lqip={{ active: true }}
+        />
       </div>
     </div>
   );
