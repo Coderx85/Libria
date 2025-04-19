@@ -3,7 +3,8 @@
 import { db } from "@/database/drizzle";
 import { books, borrowRecords } from "@/database/schema";
 import { eq } from "drizzle-orm";
-// import dayjs from "dayjs";
+import dayjs from "dayjs";
+import { BorrowBookParams } from "@/types";
 
 export const borrowBook = async (params: BorrowBookParams) => {
   const { userId, bookId } = params;
@@ -22,12 +23,12 @@ export const borrowBook = async (params: BorrowBookParams) => {
       };
     }
 
-    // const dueDate = dayjs().add(7, "day").toDate().toDateString();
+    const dueDate = dayjs().add(7, "day").toDate().toDateString();
 
     const record = await db.insert(borrowRecords).values({
       userId,
       bookId,
-      dueDate: Date.now.toString(),
+      dueDate: dueDate,
       status: "BORROWED",
     });
 

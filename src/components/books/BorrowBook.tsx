@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { toast } from "@/hooks/use-toast";
-import { borrowBook } from "@/lib/actions/book";
+import { borrowBook } from "@/actions/book.action";
 
 interface Props {
   userId: string;

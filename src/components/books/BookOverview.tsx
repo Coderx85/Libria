@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import BookCover from "@/components/books/BookCover";
-import BorrowBook from "@/components/BorrowBook";
+import BorrowBook from "@/components/books/BorrowBook";
 import { db } from "@/database/drizzle";
 import { users } from "@/database/schema";
 import { eq } from "drizzle-orm";
@@ -71,7 +71,7 @@ const BookOverview = async ({
 
         {user && (
           <BorrowBook
-            bookId={id}
+            bookId={String(id)}
             userId={userId}
             borrowingEligibility={borrowingEligibility}
           />
@@ -88,11 +88,11 @@ const BookOverview = async ({
           />
 
           <div className="absolute left-16 top-10 rotate-12 opacity-40 max-sm:hidden">
-            {/* <BookCover
+            <BookCover
               variant="wide"
               coverColor={coverColor}
               coverImage={coverUrl}
-            /> */}
+            />
           </div>
         </div>
       </div>
