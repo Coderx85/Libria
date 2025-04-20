@@ -3,7 +3,7 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-import BookCoverSvg from "@/components/BookCoverSvg";
+import { BookCoverSvg } from "@/components/books";
 import { IKImage } from "imagekitio-next";
 import config from "@/lib/config";
 
@@ -27,7 +27,7 @@ interface Props {
 const BookCover = ({
   className,
   variant = "regular",
-  // coverColor = "#012B48",
+  coverColor = "#012B48",
   coverImage = "https://placehold.co/400x600.png",
 }: Props) => {
   return (

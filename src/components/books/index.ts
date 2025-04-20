@@ -1,13 +1,13 @@
-export * from './BorrowBook';
+export { default as BorrowBook } from './BorrowBook';
 
-export * from './BookCard';
+export { default as BookCard} from './BookCard';
 
-export * from './BookCover';
+export { default as BookCover} from './BookCover';
 
-export * from './BookCoverSvg';
+export { default as BookCoverSvg} from './BookCoverSvg';
 
-export * from './BookList';
+export { default as BookList } from './BookList';
 
-export * from './BookOverview';
+export { default as BookOverview } from './BookOverview';
 
-export * from './BookVideo';
+export { default as BookVideo } from './BookVideo';
