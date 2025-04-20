@@ -1,7 +1,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { signOut } from "@/auth";
-import BookList from "@/components/books/BookList";
+import { BookList } from "@/components/books";
 import { sampleBooks } from "@/constant";
 import { Metadata } from "next";
 

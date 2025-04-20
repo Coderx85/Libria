@@ -4,8 +4,7 @@ import { books } from "@/database/schema";
 import { eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
-import BookOverview from "@/components/books/BookOverview";
-import BookVideo from "@/components/books/BookVideo";
+import { BookOverview, BookVideo } from "@/components/books";
 import { Metadata } from "next";
 
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {

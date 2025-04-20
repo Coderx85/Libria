@@ -1,5 +1,4 @@
-import BookList from "@/components/books/BookList";
-import BookOverview from "@/components/books/BookOverview";
+import { BookList, BookOverview } from "@/components/books";
 import { sampleBooks } from "@/constant";
 import { auth } from "@/auth";
 
