@@ -25,30 +25,31 @@ export default function SubscriptionPlans() {
       }
 
       const { orderId } = await response.json();
+      console.log('Order ID:', orderId);
 
       // Initialize Razorpay
       const options = {
-        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-        order_id: orderId,
-        name: 'Libria',
-        description: 'Book Subscription',
-        handler: function (response: any) {
-          console.log('Payment successful:', response);
-          // You can redirect to a success page or update UI here
-        },
-        prefill: {
-          email: session?.user?.email,
-        },
+        key_id: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+        // order_id: orderId,
+        // name: 'Libria',
+        // description: 'Book Subscription',
+        // // handler: function (response: any) {
+        // //   console.log('Payment successful:', response);
+        // //   // You can redirect to a success page or update UI here
+        // // },
+        // prefill: {
+        //   email: session?.user?.email,
+        // },
       };
 
       const razorpayInstance = new Razorpay(options);
-      // razorpayInstance.open();
+      console.log('Razorpay instance:', razorpayInstance);
     }
     catch (error) {
     console.error('Payment initiation error:', error);
     alert('Failed to initiate payment. Please try again.');
     }
-  }, [session]);
+  }, []);
 
   useEffect(() => {
     // Load Razorpay script
