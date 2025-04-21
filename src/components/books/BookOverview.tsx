@@ -2,8 +2,8 @@ import React from "react";
 import Image from "next/image";
 import { BookCover, BorrowBook } from "@/components/books";
 import { db } from "@/database/drizzle";
-import { users } from "@/database/schema";
-import { eq } from "drizzle-orm";
+import { users, subscriptions } from "@/database/schema";
+import { eq, and } from "drizzle-orm";
 import { Book } from "@/types";
 
 interface Props extends Book {
@@ -28,13 +28,28 @@ const BookOverview = async ({
     .where(eq(users.id, userId))
     .limit(1);
 
+  // Check for active subscription
+  const [activeSubscription] = await db
+    .select()
+    .from(subscriptions)
+    .where(
+      and(
+        eq(subscriptions.userId, userId),
+        eq(subscriptions.status, "ACTIVE")
+      )
+    )
+    .limit(1);
+
   const borrowingEligibility = {
-    isEligible: availableCopies > 0 && user?.status === "APPROVED",
+    isEligible: availableCopies > 0 && user?.status === "APPROVED" && !!activeSubscription,
     message:
       availableCopies <= 0
         ? "Book is not available"
+        : !activeSubscription
+        ? "Please subscribe to borrow books"
         : "You are not eligible to borrow this book",
   };
+
   return (
     <section className="book-overview">
       <div className="flex flex-1 flex-col gap-5">
