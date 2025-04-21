@@ -7,6 +7,7 @@ import {
   date,
   pgEnum,
   timestamp,
+  decimal,
 } from "drizzle-orm/pg-core";
 
 export const STATUS_ENUM = pgEnum("status", [
@@ -18,6 +19,11 @@ export const ROLE_ENUM = pgEnum("role", ["USER", "ADMIN"]);
 export const BORROW_STATUS_ENUM = pgEnum("borrow_status", [
   "BORROWED",
   "RETURNED",
+]);
+export const SUBSCRIPTION_STATUS_ENUM = pgEnum("subscription_status", [
+  "ACTIVE",
+  "EXPIRED",
+  "CANCELLED",
 ]);
 
 export const users = pgTable("users", {
@@ -68,6 +74,35 @@ export const borrowRecords = pgTable("borrow_records", {
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
 });
 
+export const subscriptions = pgTable("subscriptions", {
+  id: uuid("id").notNull().primaryKey().defaultRandom().unique(),
+  userId: uuid("user_id")
+    .references(() => users.id)
+    .notNull(),
+  status: SUBSCRIPTION_STATUS_ENUM("status").default("ACTIVE").notNull(),
+  startDate: timestamp("start_date", { withTimezone: true }).defaultNow().notNull(),
+  endDate: timestamp("end_date", { withTimezone: true }).notNull(),
+  price: decimal("price", { precision: 10, scale: 2 }).notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+});
+
+export const payments = pgTable("payments", {
+  id: uuid("id").notNull().primaryKey().defaultRandom().unique(),
+  subscriptionId: uuid("subscription_id")
+    .references(() => subscriptions.id)
+    .notNull(),
+  userId: uuid("user_id")
+    .references(() => users.id)
+    .notNull(),
+  amount: decimal("amount", { precision: 10, scale: 2 }).notNull(),
+  razorpayPaymentId: text("razorpay_payment_id").notNull().unique(),
+  razorpayOrderId: text("razorpay_order_id").notNull().unique(),
+  status: text("status").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+});
+
 export type User = typeof users.$inferSelect;
 export type Book = typeof books.$inferSelect;
 export type BorrowRecord = typeof borrowRecords.$inferSelect;
+export type Subscription = typeof subscriptions.$inferSelect;
+export type Payment = typeof payments.$inferSelect;
