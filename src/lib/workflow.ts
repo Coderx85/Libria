@@ -1,6 +1,7 @@
 import { Client as WorkflowClient } from "@upstash/workflow";
 import { Client as QStashClient } from "@upstash/qstash";
 import config from "@/lib/config";
+import emailjs from '@emailjs/nodejs';
 
 export const workflowClient = new WorkflowClient({
   baseUrl: config.env.upstash.qstashUrl,
@@ -15,10 +16,17 @@ export const sendEmail = async ({
   email,
   subject,
   message,
-}: {
-  email: string;
-  subject: string;
-  message: string;
-}) => {
-  // Do it Later.
-};
+}: WelcomeEmailProps) => {
+  emailjs.init({
+    privateKey: config.env.emailjs.privateKey,
+  });
+
+  await qstashClient.publishJSON({
+    url: `${config.env.apiEndpoint}/api/workflows/onboarding`,
+    body: {
+      email,
+      subject,
+      message,
+    },
+  });
+}

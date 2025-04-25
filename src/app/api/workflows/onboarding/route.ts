@@ -45,8 +45,8 @@ export const { POST } = serve<InitialData>(async (context) => {
   await context.run("new-signup", async () => {
     await sendEmail({
       email,
-      subject: "Welcome to the platform",
-      message: `Welcome ${fullName}!`,
+      subject: "Welcome to Libria!",
+      message: `Welcome ${fullName}! We're excited to have you join our community of book lovers.`
     });
   });
 
@@ -61,16 +61,16 @@ export const { POST } = serve<InitialData>(async (context) => {
       await context.run("send-email-non-active", async () => {
         await sendEmail({
           email,
-          subject: "Are you still there?",
-          message: `Hey ${fullName}, we miss you!`,
+          subject: "We miss you at Libria!",
+          message: `Hey ${fullName}, we noticed you haven't been around lately. Come back and explore our latest collection of books!`
         });
       });
     } else if (state === "active") {
       await context.run("send-email-active", async () => {
         await sendEmail({
           email,
-          subject: "Welcome back!",
-          message: `Welcome back ${fullName}!`,
+          subject: "Thank you for being active!",
+          message: `Hi ${fullName}, thank you for being an active member of our community. Keep exploring and enjoying our books!`
         });
       });
     }
