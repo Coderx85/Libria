@@ -1,8 +1,8 @@
 "use server";
 
 import { db } from "@/database/drizzle";
-import { books, borrowRecords } from "@/database/schema";
-import { eq } from "drizzle-orm";
+import { books, borrowRecords, users } from "@/database/schema";
+import { eq, and } from "drizzle-orm";
 import dayjs from "dayjs";
 import { BorrowBookParams } from "@/types";
 
@@ -32,6 +32,7 @@ export const borrowBook = async (params: BorrowBookParams) => {
       status: "BORROWED",
     });
 
+    // update the available copies of the book
     await db
       .update(books)
       .set({ availableCopies: book[0].availableCopies - 1 })
@@ -50,3 +51,19 @@ export const borrowBook = async (params: BorrowBookParams) => {
     };
   }
 };
+
+export async function getBooks(userId: string) {
+  // authenticate
+  await db
+    .select()
+    .from(users)
+    .where(and(eq(users.id, userId), eq(users.isAdmin, true)))
+
+  // get all books
+  const dbBooks = await db
+    .select()
+    .from(books)
+    .orderBy(books.createdAt);
+
+  return dbBooks;
+}
