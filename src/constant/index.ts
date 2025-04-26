@@ -14,7 +14,7 @@ export const navigationLinks = [
   },
 ];
 
-export const adminSideBarLinks = [
+export const  adminSideBarLinks = [
   {
     img: "/icons/admin/home.svg",
     route: "/admin",
@@ -30,16 +30,16 @@ export const adminSideBarLinks = [
     route: "/admin/books",
     text: "All Books",
   },
-  {
-    img: "/icons/admin/bookmark.svg",
-    route: "/admin/book-requests",
-    text: "Borrow Requests",
-  },
-  {
-    img: "/icons/admin/user.svg",
-    route: "/admin/account-requests",
-    text: "Account Requests",
-  },
+  // {
+  //   img: "/icons/admin/bookmark.svg",
+  //   route: "/admin/book-requests",
+  //   text: "Borrow Requests",
+  // },
+  // {
+  //   img: "/icons/admin/user.svg",
+  //   route: "/admin/account-requests",
+  //   text: "Account Requests",
+  // },
 ];
 
 export const FIELD_NAMES = {
