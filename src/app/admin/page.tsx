@@ -1,8 +1,8 @@
 // import { getUsers } from "@/actions/admin/users.action";
 // import { getBooks } from "@/actions/book.action";
 import { StatCard } from "@/components/admin/StatCard";
-import { User, BookOpen, BookMarked, Clock } from "lucide-react";
 // import { getSession } from "next-auth/react";
+import { FaUser, FaBookOpen, FaBookmark, FaClock } from "react-icons/fa"
 
 export default async function AdminDashboard() {
   // Total books
@@ -17,7 +17,8 @@ export default async function AdminDashboard() {
         <StatCard
           title="Active Subscriptions"
           value={12}
-          icon={<BookMarked className="size-6" />}
+          icon={FaBookmark}
+          // icon={<BookMarked className="size-6" />}
           description="+2% this month"
           variant="active"
           size="lg"
@@ -26,7 +27,8 @@ export default async function AdminDashboard() {
           title="Total Users"
           value={1034}
           // value={users.length}
-          icon={<User className="size-6" />}
+          icon={FaUser}
+          // icon={<User className="size-6" />}
           description="+5% from last week"
           variant="total"
           size="lg"
@@ -34,7 +36,8 @@ export default async function AdminDashboard() {
         <StatCard
           title="Overdue Books"
           value={24}
-          icon={<Clock className="size-5" />}
+          icon={FaClock}
+          // icon={<Clock className="size-5" />}
           description="Action needed"
           variant="dues"
           size="lg"
@@ -48,14 +51,16 @@ export default async function AdminDashboard() {
           title="Total Books"
           // value={totalBooks.length}
           value={205}
-          icon={<BookOpen className="size-6" />}
+          icon={FaBookOpen}
+          // icon={<BookOpen className="size-6" />}
           variant="total"
           size="md"
         />
         <StatCard
           title="Books Borrowed"
           value={1029}
-          icon={<BookMarked className="size-5" />}
+          icon={FaBookmark}
+          // icon={<BookMarked className="size-5" />}
           description="Stable usage"
           variant="active"
           size="md"
