@@ -18,6 +18,8 @@ import { dummyUsers } from '@/constant/sample'
 import { Input } from '@/components/ui/input';
 import { StatCard } from '@/components/admin/StatCard';
 import { FaUser } from 'react-icons/fa';
+import SubscribedUserChart from '../_components/charts/SubscribedUserChart';
+import UserTimelineChart from '../_components/charts/UserTimelineChart';
 
 const tableAnimations = {
   initial: { opacity: 0, y: 20 },
@@ -89,16 +91,23 @@ const UsersPage = () => {
         />
       </motion.div>
 
-      <StatCard
-        title="Total Users"
-        value={dummyUsers.length}
-        // value={users.length}
-        icon={FaUser}
-        // icon={<User className="size-6" />}
-        description="+5% from last week"
-        variant="total"
-        // size="lg"
-      />
+      <section className='flex '>
+        <div>
+          <StatCard
+            title="Total Users"
+            value={dummyUsers.length}
+            // value={users.length}
+            icon={FaUser}
+            // icon={<User className="size-6" />}
+            description="+5% from last week"
+            variant="total"
+            // size="lg"
+          />
+          <SubscribedUserChart />
+        </div>
+        <UserTimelineChart />
+
+      </section>
       <AnimatePresence>
         <motion.div
           variants={tableAnimations}
