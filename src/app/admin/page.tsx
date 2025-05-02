@@ -29,7 +29,7 @@ export default async function AdminDashboard() {
           // value={users.length}
           icon={FaUser}
           // icon={<User className="size-6" />}
-          description="+5% from last week"
+          description="+5% from last week" 
           variant="total"
           size="lg"
         />
@@ -46,7 +46,7 @@ export default async function AdminDashboard() {
       </div>
 
       {/* Secondary Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-80">
         <StatCard
           title="Total Books"
           // value={totalBooks.length}
