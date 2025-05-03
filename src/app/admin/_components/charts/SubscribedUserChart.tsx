@@ -20,18 +20,15 @@ const SubscribedUserChart = (
 
   const data = [
     { name: 'Approved Users', value: approvedUsers, color: 'var(--chart-2)' },
-    { name: 'Pending Users', value: pendingUsers, color: 'var(--chart-3)' },
-    { name: 'Rejected Users', value: rejectedUsers, color: 'var(--chart-1)' }
+    { name: 'Pending Users', value: pendingUsers, color: 'var(--chart-4)' },
+    { name: 'Rejected Users', value: rejectedUsers, color: 'var(--chart-5)' }
   ]
 
   return (
-    <div className="w-[400px] bg-gradient-to-b from-slate-950/75 to-slate-950/75 via-slate-900/75 rounded-lg shadow-md">
-      <Card>
-        <CardHeader>
-          <CardTitle className='underline leading-1.5'>User Distribution</CardTitle>
-        </CardHeader>
+    <div className="w-full h-full min-h-[300px] flex flex-row">
+      <Card className="flex-1 bg-transparent">
         <CardContent>
-          <div className="h-[300px]">
+          <div className="xl:h-[300px] xl:w-full h-52 w-52">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie

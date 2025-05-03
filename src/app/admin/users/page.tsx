@@ -46,291 +46,234 @@ const HeaderProps = ({ Icon, name }: { Icon: IconType, name: string }) => {
 const UsersPage = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
-
-  const filteredUsers = users.filter(user =>
-    user.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    user.universityId.toString().includes(searchQuery)
-  );
-
+  
   return (
-    <motion.section 
-      className="flex flex-col gap-3"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
-    >
-      <motion.div 
-        className="flex items-center justify-between"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.2 }}
+    <div className="container mx-auto max-w-[1600px] min-h-screen">
+      <motion.section 
+        className="flex flex-col gap-4 lg:gap-6"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
       >
-        <div className="flex items-center gap-3">
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="p-3 rounded-full bg-gray-800/50 shadow-lg"
-          >
-            <Image
-              src="/icons/admin/users.svg"
-              alt="Users"
-              width={24}
-              height={24}
-              className="invert"
-            />
-          </motion.div>
-          <h1 className="text-2xl font-semibold text-gray-100">User Management</h1>
-        </div>
-        <Input
-          type="text"
-          placeholder="Search by Full Name, Email, or University ID"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="p-2 rounded-md bg-gray-800 text-gray-100 w-[400px] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-        />
-      </motion.div>
-
-      <section className='flex '>
-        <div>
-          <StatCard
-            title="Total Users"
-            value={dummyUsers.length}
-            // value={users.length}
-            icon={FaUser}
-            // icon={<User className="size-6" />}
-            description="+5% from last week"
-            variant="total"
-            // size="lg"
-          />
-          <SubscribedUserChart />
-        </div>
-        <UserTimelineChart />
-
-      </section>
-      <AnimatePresence>
-        <motion.div
-          variants={tableAnimations}
-          initial="initial"
-          animate="animate"
-          exit="exit"
-          className="rounded-lg border border-gray-700 overflow-hidden bg-gray-900/50 backdrop-blur-sm"
+        {/* Header Section */}
+        <motion.div 
+          className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-gray-900/30 backdrop-blur-sm p-4 rounded-lg border border-gray-800/50"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.2 }}
         >
-          <Table>
-            <TableHeader>
-              <TableRow className="border-gray-800 hover:bg-gray-800/50">
-                <TableHead className="text-gray-400">Avatar</TableHead>
-                <TableHead className="text-gray-400">Full Name</TableHead>
-                <TableHead className="text-gray-400">Email</TableHead>
-                <TableHead className="text-gray-400">University ID</TableHead>
-                <TableHead className="text-gray-400">Status</TableHead>
-                <TableHead className="text-gray-400">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {/* {filteredUsers.map((user, index) => (
-                <motion.tr
-                  key={user.id}
-                  variants={rowAnimations}
-                  initial="initial"
-                  animate="animate"
-                  transition={{ delay: index * 0.1 }}
-                  className="border-b border-gray-800 hover:bg-gray-800/50"
-                >
-                  <TableCell>
-                    <motion.div
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.95 }}
-                      className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center shadow-lg"
-                    >
-                      <Image
-                        src="/icons/admin/user.svg"
-                        alt="User Avatar"
-                        width={20}
-                        height={20}
-                        className="invert opacity-70"
-                      />
-                    </motion.div>
-                  </TableCell>
-                  <TableCell className="font-medium text-gray-200">{user.fullName}</TableCell>
-                  <TableCell className="text-gray-300">{user.email}</TableCell>
-                  <TableCell className="text-gray-300">{user.universityId}</TableCell>
-                  <TableCell>
-                    <motion.span
-                      whileHover={{ scale: 1.05 }}
-                      className="px-3 py-1 text-xs rounded-full bg-gray-800 text-emerald-400 border border-emerald-500/20"
-                    >
-                      Active
-                    </motion.span>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-2">
-                      <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Button 
-                              variant="secondary" 
-                              size="sm"
-                              className="bg-gray-800 hover:bg-gray-700 text-gray-200"
-                            >
-                              <motion.div
-                                whileHover={{ rotate: 15 }}
-                                transition={{ duration: 0.2 }}
-                              >
-                                <Image
-                                  src="/icons/admin/edit.svg"
-                                  alt="Edit"
-                                  width={16}
-                                  height={16}
-                                  className="mr-1.5 invert opacity-70"
-                                />
-                              </motion.div>
-                              Edit
-                            </Button>
-                          </TooltipTrigger>
-                          <TooltipContent className="bg-gray-800 text-gray-200">
-                            <p>Edit user details</p>
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
-
-                      <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Button 
-                              variant="destructive" 
-                              size="sm"
-                              className="bg-red-500/10 hover:bg-red-500/20 text-red-400"
-                            >
-                              <motion.div
-                                whileHover={{ scale: 1.1 }}
-                                whileTap={{ scale: 0.9 }}
-                              >
-                                <Image
-                                  src="/icons/admin/trash.svg"
-                                  alt="Delete"
-                                  width={16}
-                                  height={16}
-                                  className="mr-1.5"
-                                />
-                              </motion.div>
-                              Delete
-                            </Button>
-                          </TooltipTrigger>
-                          <TooltipContent className="bg-gray-800 text-gray-200">
-                            <p>Delete user account</p>
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
-                    </div>
-                  </TableCell>
-                </motion.tr>
-              ))} */}
-              {dummyUsers.map((user, idx) => (
-                <motion.tr
-                  key={user.id}
-                  variants={rowAnimations}
-                  initial="initial"
-                  animate="animate"
-                  transition={{ delay: idx * 0.1 }}
-                  className="border-b border-gray-800 hover:bg-gray-800/50"
-                >
-                  <TableCell>
-                    <motion.div
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.95 }}
-                      className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center shadow-lg"
-                    >
-                      <Image
-                        src="/icons/admin/user.svg"
-                        alt="User Avatar"
-                        width={20}
-                        height={20}
-                        className="invert opacity-70"
-                      />
-                    </motion.div>
-                  </TableCell>
-                  <TableCell className="font-medium text-gray-200">{user.fullName}</TableCell>
-                  <TableCell className="text-gray-300">{user.email}</TableCell>
-                  <TableCell className="text-gray-300">{user.universityId}</TableCell>
-                  <TableCell>
-                    <motion.span
-                      whileHover={{ scale: 1.05 }}
-                      className="px-3 py-1 text-xs rounded-full bg-gray-800 text-emerald-400 border border-emerald-500/20"
-                    >
-                      Active
-                    </motion.span>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-2">
-                      <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Button 
-                              variant="secondary" 
-                              size="sm"
-                              className="bg-gray-800 hover:bg-gray-700 text-gray-200"
-                            >
-                              <motion.div
-                                whileHover={{ rotate: 15 }}
-                                transition={{ duration: 0.2 }}
-                              >
-                                <Image
-                                  src="/icons/admin/edit.svg"
-                                  alt="Edit"
-                                  width={16}
-                                  height={16}
-                                  className="mr-1.5 invert opacity-70"
-                                />
-                              </motion.div>
-                              Edit
-                            </Button>
-                          </TooltipTrigger>
-                          <TooltipContent className="bg-gray-800 text-gray-200">
-                            <p>Edit user details</p>
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
-
-                      <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Button 
-                              variant="destructive" 
-                              size="sm"
-                              className="bg-red-500/10 hover:bg-red-500/20 text-red-400"
-                            >
-                              <motion.div
-                                whileHover={{ scale: 1.1 }}
-                                whileTap={{ scale: 0.9 }}
-                              >
-                                <Image
-                                  src="/icons/admin/trash.svg"
-                                  alt="Delete"
-                                  width={16}
-                                  height={16}
-                                  className="mr-1.5"
-                                />
-                              </motion.div>
-                              Delete
-                            </Button>
-                          </TooltipTrigger>
-                          <TooltipContent className="bg-gray-800 text-gray-200">
-                            <p>Delete user account</p>
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
-                    </div>
-                  </TableCell>
-                </motion.tr>
-              ))
-              }
-            </TableBody>
-          </Table>
+          <div className="flex items-center gap-3">
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="p-3 rounded-full bg-gray-800/50 shadow-lg"
+            >
+              <Image
+                src="/icons/admin/users.svg"
+                alt="Users"
+                width={24}
+                height={24}
+                className="invert"
+              />
+            </motion.div>
+            <div>
+              <h1 className="text-xl lg:text-2xl font-semibold text-gray-100">User Management</h1>
+              <p className="text-sm text-gray-400">Manage and monitor user accounts</p>
+            </div>
+          </div>
+          
+          <Input
+            type="text"
+            placeholder="Search users..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full sm:w-[350px] lg:w-[400px] p-2 rounded-md bg-gray-800 text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+          />
         </motion.div>
-      </AnimatePresence>
-    </motion.section>
-  );
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6">
+          {/* Stats Cards - Mobile Scrollable, Desktop Fixed */}
+          <div className="lg:col-span-3 overflow-auto lg:overflow-visible">
+            <div className="flex lg:flex-col gap-4 lg:gap-6 lg:sticky lg:top-6">
+              {/* Make cards scroll horizontally on mobile */}
+              <div className="min-w-[250px] sm:min-w-0">
+                <StatCard
+                  title="Total Users"
+                  value={dummyUsers.length}
+                  icon={FaUser}
+                  description="+5% from last week"
+                  variant="total"
+                  size="md"
+                />
+              </div>
+              <div className="min-w-[250px] sm:min-w-0">
+                <StatCard
+                  title="Active Users"
+                  value={Math.floor(dummyUsers.length * 0.8)}
+                  icon={FaUser}
+                  description="80% of total users"
+                  variant="active"
+                  size="md"
+                />
+              </div>
+              <div className="min-w-[250px] sm:min-w-0">
+                <StatCard
+                  title="Pending Users"
+                  value={Math.floor(dummyUsers.length * 0.2)}
+                  icon={FaUser}
+                  description="Awaiting approval"
+                  variant="dues"
+                  size="md"
+                />
+              </div>
+            </div>
+          </div>
+          
+          {/* Charts and Table Section */}
+          <div className="lg:col-span-9 space-y-4 lg:space-y-6">
+            {/* Charts Grid */}
+            <div className="hidden xl:grid xl:grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
+              <div className="bg-gray-900/50 backdrop-blur-sm rounded-lg border border-gray-800 p-4 lg:p-5">
+                <h3 className="text-base lg:text-lg font-semibold text-gray-200 mb-4">User Subscription Trends</h3>
+                <SubscribedUserChart />
+              </div>
+              
+              <div className="bg-gray-900/50 backdrop-blur-sm rounded-lg border border-gray-800 p-4 lg:p-5">
+                <h3 className="text-base lg:text-lg font-semibold text-gray-200 mb-4">User Activity Timeline</h3>
+                <UserTimelineChart />
+              </div>
+            </div>
+
+          </div>
+        </div>
+        {/* Users Table */}
+        <AnimatePresence>
+          <motion.div
+            variants={tableAnimations}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            className="rounded-lg border border-gray-700 overflow-hidden bg-gray-900/50 backdrop-blur-sm"
+          >
+            <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-transparent">
+              <Table>
+                <TableHeader>
+                  <TableRow className="border-gray-800 hover:bg-gray-800/50">
+                    <TableHead className="text-gray-400 whitespace-nowrap">Avatar</TableHead>
+                    <TableHead className="text-gray-400 whitespace-nowrap">Full Name</TableHead>
+                    <TableHead className="text-gray-400 whitespace-nowrap">Email</TableHead>
+                    <TableHead className="text-gray-400 whitespace-nowrap">University ID</TableHead>
+                    <TableHead className="text-gray-400 whitespace-nowrap">Status</TableHead>
+                    <TableHead className="text-gray-400 whitespace-nowrap">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {dummyUsers.map((user, idx) => (
+                    <motion.tr
+                      key={user.id}
+                      variants={rowAnimations}
+                      initial="initial"
+                      animate="animate"
+                      transition={{ delay: idx * 0.1 }}
+                      className="border-b border-gray-800 hover:bg-gray-800/50"
+                    >
+                      <TableCell className="w-[60px]">
+                        <motion.div
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.95 }}
+                          className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center shadow-lg"
+                        >
+                          <Image
+                            src="/icons/admin/user.svg"
+                            alt="User Avatar"
+                            width={20}
+                            height={20}
+                            className="invert opacity-70"
+                          />
+                        </motion.div>
+                      </TableCell>
+                      <TableCell className="font-medium text-gray-200 min-w-[120px]">{user.fullName}</TableCell>
+                      <TableCell className="text-gray-300 min-w-[180px]">{user.email}</TableCell>
+                      <TableCell className="text-gray-300 min-w-[120px]">{user.universityId}</TableCell>
+                      <TableCell className="min-w-[100px]">
+                        <motion.span
+                          whileHover={{ scale: 1.05 }}
+                          className="inline-flex px-3 py-1 text-xs rounded-full bg-gray-800 text-emerald-400 border border-emerald-500/20"
+                        >
+                          Active
+                        </motion.span>
+                      </TableCell>
+                      <TableCell className="min-w-[160px]">
+                        <div className="flex items-center gap-2">
+                          <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <Button 
+                                  variant="secondary" 
+                                  size="sm"
+                                  className="bg-gray-800 hover:bg-gray-700 text-gray-200"
+                                >
+                                  <motion.div
+                                    whileHover={{ rotate: 15 }}
+                                    transition={{ duration: 0.2 }}
+                                  >
+                                    <Image
+                                      src="/icons/admin/edit.svg"
+                                      alt="Edit"
+                                      width={16}
+                                      height={16}
+                                      className="mr-1.5 invert opacity-70"
+                                    />
+                                  </motion.div>
+                                  <span className="hidden sm:inline">Edit</span>
+                                </Button>
+                              </TooltipTrigger>
+                              <TooltipContent className="bg-gray-800 text-gray-200">
+                                <p>Edit user details</p>
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+
+                          <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <Button 
+                                  variant="destructive" 
+                                  size="sm"
+                                  className="bg-red-500/10 hover:bg-red-500/20 text-red-400"
+                                >
+                                  <motion.div
+                                    whileHover={{ scale: 1.1 }}
+                                    whileTap={{ scale: 0.9 }}
+                                  >
+                                    <Image
+                                      src="/icons/admin/trash.svg"
+                                      alt="Delete"
+                                      width={16}
+                                      height={16}
+                                      className="mr-1.5"
+                                    />
+                                  </motion.div>
+                                  <span className="hidden sm:inline">Delete</span>
+                                </Button>
+                              </TooltipTrigger>
+                              <TooltipContent className="bg-gray-800 text-gray-200">
+                                <p>Delete user account</p>
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                        </div>
+                      </TableCell>
+                    </motion.tr>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          </motion.div>
+        </AnimatePresence>
+      </motion.section>
+    </div>
+  )
 }
 
 export default UsersPage
