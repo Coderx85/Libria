@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/database/drizzle";
-import { books, users } from "@/database/schema";
+import { books } from "@/database/schema";
 import { eq } from "drizzle-orm";
 import { Book } from "@/database/schema";
 import { Book as BookType } from "@/types";
@@ -14,21 +14,48 @@ export async function createBook(values: z.infer<typeof bookSchema>): Promise<Ad
     const [book] = await db
       .insert(books)
       .values({
-        title: values.title,
-        description: values.description,
+        ...values,
+        status: "PENDING",
       })
-      .returning()
-      
+      .returning();
+
     return {
-      data: book,
+      data: book as BookType,
       success: true,
-    }
-  }
-  catch (error) {
+    };
+  } catch (error) {
     console.error("Error creating book:", error);
     return {
       success: false,
       error: "Failed to create book",
     };
   }
-  
+}
+
+export async function updateBookStatus(
+  id: string,
+  status: "APPROVED" | "REJECTED"
+): Promise<AdminResponse<BookType>> {
+  try {
+    const [book] = await db
+      .update(books)
+      .set({
+        status,
+        availableCopies: status === "APPROVED" ? books.totalCopies : 0,
+      })
+      .where(eq(books.id, id))
+      .returning();
+
+    return {
+      data: book as BookType,
+      success: true,
+    };
+  } catch (error) {
+    console.error("Error updating book status:", error);
+    return {
+      success: false,
+      error: `Failed to ${status.toLowerCase()} book`,
+    };
+  }
+}
+
