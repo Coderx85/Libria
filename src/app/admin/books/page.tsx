@@ -1,62 +1,49 @@
-"use client"
-import React, { useState } from "react";
-import { getBooks } from "@/actions/book.action";
-import BookList from "@/components/books/BookList";
-import BookDialog from "@/components/admin/forms/BookDialog";
-import { Book, BookParams } from "@/types";
+import React from 'react';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import PendingBookList from '@/components/admin/PendingBookList';
+import { BookCard } from '@/components/books';
+import { dummyBooks } from '@/constant/sample';
 
-const BooksPage = () => {
-  const [books, setBooks] = useState<Book[]>([]);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [editingBook, setEditingBook] = useState<BookParams | null>(null);
-
-  const fetchBooks = async () => {
-    const fetchedBooks = await getBooks("admin-user-id"); // Replace with actual admin user ID
-    setBooks(fetchedBooks);
-  };
-
-  const handleAddBook = () => {
-    setEditingBook(null);
-    setIsDialogOpen(true);
-  };
-
-  // const handleEditBook = (book: BookParams) => {
-  //   setEditingBook(book);
-  //   setIsDialogOpen(true);
-  // };
-
-  const handleSubmit = (book: BookParams) => {
-    if (editingBook) {
-      console.log("Updating book:", book);
-      // Update book logic here
-    } else {
-      // Add book logic here
-    }
-    fetchBooks();
-  };
-
-  React.useEffect(() => {
-    fetchBooks();
-  }, []);
+const BookPage = async () => {
+  // Filter books by status
+  const pendingBooks = dummyBooks.filter((book) => book.status === 'PENDING');
+  const allBooks = dummyBooks
 
   return (
-    <section>
-      <h1>Books Management</h1>
-      <button onClick={handleAddBook}>Add Book</button>
-      <BookList
-        title="All Books"
-        books={books}
-        containerClassName="admin-book-list"
-      />
-      <BookDialog
-        isOpen={isDialogOpen}
-        onClose={() => setIsDialogOpen(false)}
-        onSubmit={handleSubmit}
-        initialData={editingBook || undefined}
-      />
+    <div className="p-6 space-y-8">
+      {/* Pending Books Section */}
+      {pendingBooks.length > 0 && (
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <h2 className="text-2xl font-semibold">Pending Books</h2>
+            <Link href="/admin/book-requests">
+              <Button variant="outline">Show All</Button>
+            </Link>
+          </div>
+          <div className="overflow-x-auto pb-4">
+            <div className="flex gap-6 min-w-min">
+              <PendingBookList books={pendingBooks.slice(0, 5)} />
+            </div>
+          </div>
+        </div>
+      )}
 
-    </section>
+      {/* All Books Grid */}
+      <div className="space-y-4">
+        <h2 className="text-2xl font-semibold">All Books</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {allBooks.map((book) => (
+            <BookCard
+              key={book.id}
+              {...book}
+              status={book.status}
+            />
+          ))}
+        </div>
+      </div>
+    </div>
   );
 };
 
-export default BooksPage;
+export default BookPage;
