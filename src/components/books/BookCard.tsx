@@ -1,3 +1,4 @@
+"use client"
 import React from "react";
 import Link from "next/link";
 import { BookCover } from "@/components/books";
@@ -25,7 +26,7 @@ const BookCard = ({
   onReject,
 }: BookCardProps) => {
   return (
-    <li className={cn(isLoanedBook && "xs:w-52 w-full", "relative")}>
+    <li className={cn(isLoanedBook && "xs:w-52 w-full", "relative bg-border-light-200 border p-4 rounded-lg shadow-md transition-transform duration-300 hover-bg-light-100")}>
       <div className={cn(isLoanedBook && "w-full flex flex-col items-center")}>
         {status === "PENDING" && (
           <div className="absolute -top-2 -right-2 bg-yellow-600 text-white text-xs px-2 py-1 rounded-full z-10">
@@ -59,7 +60,7 @@ const BookCard = ({
         )}
 
         {status === "PENDING" && (
-          <div className="flex gap-2 mt-2">
+          <div className="flex gap-2 mt-2 px-4">
             <Button
               variant="default"
               size="sm"

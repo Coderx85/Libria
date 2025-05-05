@@ -15,6 +15,7 @@ const BookRequest = async () => {
   
   return (
     <div className='px-6'>
+      <h1 className='text-4xl text-light-200 font-bold'>Pending Books</h1>
       <PendingBookList books={pendingBooks} />
     </div>
   )
