@@ -1,5 +1,7 @@
+type BookStatus = 'APPROVED' | 'PENDING' | 'REJECTED';
+
 interface Book {
-  id: string | number; // Change to only string
+  id: string; // Change to only string
   title: string;
   author: string;
   genre: string;
@@ -11,6 +13,7 @@ interface Book {
   coverUrl: string;
   videoUrl: string;
   summary: string;
+  status: BookStatus; // Status of the book (e.g., APPROVED, PENDING, REJECTED)
   createdAt?: Date | null; // Date when the book was added to the database
 }
 
@@ -45,3 +48,4 @@ export type ImageKitResponse = {
   signature: string;
   expire: number;
 }
+

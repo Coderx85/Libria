@@ -1,4 +1,9 @@
 const config = {
+  project: {
+    name: 'Libria',
+    logo: '/icons/admin/logo.svg',
+    description: 'A library management system for universities',
+  },
   env: {
     apiEndpoint: process.env.NEXT_PUBLIC_API_ENDPOINT!,
     prodApiEndpoint: process.env.NEXT_PUBLIC_PROD_API_ENDPOINT!,
@@ -20,6 +25,12 @@ const config = {
       keySecret: process.env.RAZORPAY_KEY_SECRET!,
       webhookSecret: process.env.RAZORPAY_WEBHOOK_SECRET!,
     },
+    emailjs:{
+      serviceId: process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
+      templateId: process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!,
+      publicKey: process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!,
+      privateKey: process.env.EMAILJS_PRIVATE_KEY!,
+    }
   },
 };
 
